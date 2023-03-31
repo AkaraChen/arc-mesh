@@ -7,7 +7,8 @@ Yet another mesh library.
 ```ts
 import { Mesh } from 'arc-mesh';
 
-const mesh = new Mesh();
+const canvas = document.querySelector('canvas');
+const mesh = new Mesh({ canvas });
 mesh.start();
 ```
 
