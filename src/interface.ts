@@ -11,18 +11,9 @@ export type GradientOptions = {
 	width?: number;
 	height?: number;
 	threshold?: number;
-	colors?: {
-		r: number;
-		g: number;
-		b: number;
-	};
-	cycle?: number;
+	colors?: Color[];
 	points?: Point[];
-};
-
-export type ColorCycleOptions = {
-	color: Color;
-	cycle: number;
+	size?: number;
 };
 
 export type Color = {

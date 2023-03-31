@@ -5,7 +5,20 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./src/style.css" />
+  <style>
+    body {
+      overflow: hidden;
+    }
+
+    #filter {
+      filter: blur(100px);
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      background-color: #54ebde;
+    }
+  </style>
   <title>Document</title>
 </head>
 
@@ -21,8 +34,8 @@
   <script type="module" lang="ts">
     import { Mesh } from './src/index.ts'
     const canvas = document.querySelector('canvas');
-    const width = 1200
-    const height = 800
+    const width = window.innerWidth
+    const height = window.innerHeight
     const mesh = new Mesh({ canvas, width, height })
     mesh.start()
     document.querySelector('#start').addEventListener('click', () => {
