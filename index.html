@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./src/style.css" />
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="filter">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="toggle">Toggle</button>
+  </div>
+  <script type="module" lang="ts">
+    import { Mesh } from './src/index.ts'
+    const canvas = document.querySelector('canvas');
+    const width = 1200
+    const height = 800
+    const mesh = new Mesh({ canvas, width, height })
+    mesh.start()
+    document.querySelector('#start').addEventListener('click', () => {
+      mesh.start()
+    })
+    document.querySelector('#stop').addEventListener('click', () => {
+      mesh.stop()
+    })
+    document.querySelector('#toggle').addEventListener('click', () => {
+      mesh.toggle()
+    })
+  </script>
+</body>
+
+</html>
