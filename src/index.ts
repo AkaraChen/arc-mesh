@@ -1,4 +1,31 @@
-import {type Color, type GradientOptions, type Point} from './types/interface';
+import {type ColorCycleOptions, type Color, type GradientOptions, type Point} from './types/interface';
+
+export class ColorCycle {
+	base: Color;
+	cycle: number;
+	color: Color;
+
+	constructor(opts: ColorCycleOptions) {
+		this.base = opts.color ?? {
+			r: 255,
+			g: 0,
+			b: 0,
+		};
+		this.color = this.base;
+		this.cycle = 0;
+	}
+
+	colorCycle() {
+		this.cycle += 0.1;
+		if (this.cycle > 255) {
+			this.cycle = 0;
+		}
+
+		this.color.r = ~~(Math.sin(0.3 * this.cycle + 0) * 127 + 128);
+		this.color.g = ~~(Math.sin(0.3 * this.cycle + 2) * 127 + 128);
+		this.color.b = ~~(Math.sin(0.3 * this.cycle + 4) * 127 + 128);
+	}
+}
 
 export class Mesh {
 	private canvas!: HTMLCanvasElement;
@@ -8,9 +35,8 @@ export class Mesh {
 	private width!: number;
 	private height!: number;
 	private threshold!: number;
-	private colors!: Color;
+	private cr!: ColorCycle;
 
-	private cycle!: number;
 	private points!: Point[];
 	private timer!: number | undefined;
 
@@ -53,12 +79,14 @@ export class Mesh {
 		this.width = opts.width ?? 512;
 		this.height = opts.height ?? 512;
 		this.threshold = opts.threshold ?? 210;
-		this.colors = opts.colors ?? {
-			r: 255,
-			g: 0,
-			b: 0,
-		};
-		this.cycle = opts.cycle ?? 0;
+		this.cr = new ColorCycle({
+			color: opts.colors ?? {
+				r: 255,
+				g: 0,
+				b: 0,
+			},
+			cycle: 0,
+		});
 		this.points = opts.points
 			?? new Array(50).fill(0).map(this.getPoint.bind(this));
 		this.canvas.width = this.width;
@@ -110,26 +138,15 @@ export class Mesh {
 				point.y,
 				point.size,
 			);
-			grad.addColorStop(0, `rgba(${this.colors.r},${this.colors.g},${this.colors.b},1)`);
-			grad.addColorStop(1, `rgba(${this.colors.r},${this.colors.g},${this.colors.b},0)`);
+			grad.addColorStop(0, `rgba(${this.cr.color.r},${this.cr.color.g},${this.cr.color.b},1)`);
+			grad.addColorStop(1, `rgba(${this.cr.color.r},${this.cr.color.g},${this.cr.color.b},0)`);
 			this.tempCtx.fillStyle = grad;
 			this.tempCtx.arc(point.x, point.y, point.size, 0, Math.PI * 2);
 			this.tempCtx.fill();
 		}
 
 		this.metabalize();
-		this.colorCycle();
-	}
-
-	private colorCycle() {
-		this.cycle += 0.1;
-		if (this.cycle > 255) {
-			this.cycle = 0;
-		}
-
-		this.colors.r = ~~(Math.sin(0.3 * this.cycle + 0) * 127 + 128);
-		this.colors.g = ~~(Math.sin(0.3 * this.cycle + 2) * 127 + 128);
-		this.colors.b = ~~(Math.sin(0.3 * this.cycle + 4) * 127 + 128);
+		this.cr.colorCycle();
 	}
 
 	private metabalize() {

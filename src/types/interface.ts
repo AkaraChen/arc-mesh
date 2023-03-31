@@ -20,6 +20,11 @@ export type GradientOptions = {
 	points?: Point[];
 };
 
+export type ColorCycleOptions = {
+	color: Color;
+	cycle: number;
+};
+
 export type Color = {
 	r: number;
 	g: number;
